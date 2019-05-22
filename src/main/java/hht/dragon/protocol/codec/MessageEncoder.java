@@ -51,14 +51,13 @@ public class MessageEncoder extends MessageToMessageEncoder<ProtocolMessage> {
             marshallingEncoder.encode(value, byteBuf);
         }
 
-        key = null;
-        keyArray = null;
-        value = null;
         if (protocolMessage.getBody() != null) {
             marshallingEncoder.encode(protocolMessage.getBody(), byteBuf);
         } else {
             byteBuf.writeInt(0);
             byteBuf.setInt(4, byteBuf.readableBytes());
         }
+
+        list.add(byteBuf);
     }
 }

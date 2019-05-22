@@ -8,6 +8,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 客户端发送心跳请求.
@@ -26,7 +27,13 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
         // 握手成功，发送心跳信息
         if (message.getHeader() != null &&
         message.getHeader().getType() == MessageType.LOGIN_RESP.value()) {
-
+            heartBeat = ctx.executor().scheduleAtFixedRate(() -> runHeartBeatTask(ctx), 0, 5000,
+                    TimeUnit.MILLISECONDS);
+        } else if (message.getHeader() != null &&
+        message.getHeader().getType() == MessageType.HEARTBEAT_RESP.value()) {
+            log.info("客户端接收心跳应答: {}", message);
+        } else {
+            ctx.fireChannelRead(msg);
         }
     }
 
@@ -42,5 +49,14 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
         header.setType(MessageType.HEARTBEAT_REQ.value());
         message.setHeader(header);
         return message;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (heartBeat != null) {
+            heartBeat.cancel(true);
+            heartBeat = null;
+        }
+        ctx.fireExceptionCaught(cause);
     }
 }

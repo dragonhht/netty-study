@@ -28,9 +28,9 @@ public class MessageDecoder extends LengthFieldBasedFrameDecoder {
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
         ByteBuf buf = (ByteBuf) super.decode(ctx, in);
-        if (buf == null) {
+        /*if (buf == null) {
             return null;
-        }
+        }*/
 
         ProtocolMessage message = new ProtocolMessage();
         Header header = new Header();
