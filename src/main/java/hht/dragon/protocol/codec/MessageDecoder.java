@@ -21,45 +21,44 @@ public class MessageDecoder extends LengthFieldBasedFrameDecoder {
     MarshallingDecoder marshallingDecoder;
 
     public MessageDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength) throws IOException {
-        super(maxFrameLength, lengthFieldOffset, lengthFieldLength);
+        super(maxFrameLength, lengthFieldOffset, lengthFieldLength, -8, 0);
         marshallingDecoder = new MarshallingDecoder();
     }
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
         ByteBuf buf = (ByteBuf) super.decode(ctx, in);
-        /*if (buf == null) {
+        if (buf == null) {
             return null;
-        }*/
-
+        }
         ProtocolMessage message = new ProtocolMessage();
         Header header = new Header();
-        header.setCrcCode(in.readInt());
-        header.setLength(in.readInt());
-        header.setSessionId(in.readLong());
-        header.setType(in.readByte());
-        header.setPriority(in.readByte());
+        header.setCrcCode(buf.readInt());
+        header.setLength(buf.readInt());
+        header.setSessionId(buf.readLong());
+        header.setType(buf.readByte());
+        header.setPriority(buf.readByte());
 
-        int size = in.readInt();
+        int size = buf.readInt();
         if (size > 0) {
             Map<String , Object> attachment = new HashMap<>(size);
             int keySize = 0;
             byte[] keyArray = null;
             String key = null;
             for (int i = 0; i < size; i++) {
-                keySize = in.readInt();
+                keySize = buf.readInt();
                 keyArray = new byte[keySize];
-                in.readBytes(keyArray);
+                buf.readBytes(keyArray);
                 key = new String(keyArray, "UTF-8");
-                attachment.put(key, marshallingDecoder.decoder(in));
+                attachment.put(key, marshallingDecoder.decoder(buf));
             }
             keyArray = null;
             key = null;
             header.setAttachment(attachment);
         }
 
-        if (in.readableBytes() > 4) {
-            message.setBody(marshallingDecoder.decoder(in));
+        if (buf.readableBytes() > 4) {
+            message.setBody(marshallingDecoder.decoder(buf));
         }
         message.setHeader(header);
         return message;

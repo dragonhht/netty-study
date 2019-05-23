@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class MessageEncoder extends MessageToMessageEncoder<ProtocolMessage> {
         Object value = null;
         for (Map.Entry<String, Object> entry : header.getAttachment().entrySet()) {
             key = entry.getKey();
-            keyArray = key.getBytes("UTF-8");
+            keyArray = key.getBytes(StandardCharsets.UTF_8);
             byteBuf.writeInt(keyArray.length);
             byteBuf.writeBytes(keyArray);
             value = entry.getValue();
@@ -55,9 +56,8 @@ public class MessageEncoder extends MessageToMessageEncoder<ProtocolMessage> {
             marshallingEncoder.encode(protocolMessage.getBody(), byteBuf);
         } else {
             byteBuf.writeInt(0);
-            byteBuf.setInt(4, byteBuf.readableBytes());
         }
-
+        byteBuf.setInt(4, byteBuf.readableBytes());
         list.add(byteBuf);
     }
 }

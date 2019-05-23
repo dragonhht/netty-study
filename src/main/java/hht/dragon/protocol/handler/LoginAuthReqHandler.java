@@ -18,6 +18,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        log.info("客户端发起握手请求");
         ctx.writeAndFlush(buildLoginReq());
     }
 
@@ -45,6 +46,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
         Header header = new Header();
         header.setType(MessageType.LOGIN_REQ.value());
         message.setHeader(header);
+        System.out.println(message);
         return message;
     }
 

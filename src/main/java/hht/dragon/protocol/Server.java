@@ -46,6 +46,7 @@ public class Server {
                         }
                     });
 
+
             ChannelFuture future = server.bind(Constants.SERVER_PORT).sync();
             log.info("服务启动成功...");
             future.channel().closeFuture().sync();

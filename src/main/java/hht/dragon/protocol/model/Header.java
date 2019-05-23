@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,8 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public final class Header {
+public final class Header implements Serializable {
+    private static final long serialVersionUID = 4112047464555000164L;
     /** 校验码. */
     private int crcCode = 0xabef0101;
     /** 消息长度. */
