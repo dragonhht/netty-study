@@ -27,7 +27,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
         ProtocolMessage message = (ProtocolMessage)msg;
         // 握手应答消息需认证成功
         if (message.getHeader() != null &&
-        message.getHeader().getType() == MessageType.HEARTBEAT_RESP.value()) {
+        message.getHeader().getType() == MessageType.LOGIN_RESP.value()) {
             byte loginResult = (byte) message.getBody();
             if (loginResult != (byte)0) {
                 // 握手失败，关闭连接
@@ -46,7 +46,6 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
         Header header = new Header();
         header.setType(MessageType.LOGIN_REQ.value());
         message.setHeader(header);
-        System.out.println(message);
         return message;
     }
 

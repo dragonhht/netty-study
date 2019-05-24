@@ -33,7 +33,7 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
             String nodeIndex = ctx.channel().remoteAddress().toString();
             ProtocolMessage loginResp = null;
             // 重复登录
-            if (nodeIndex.contains(nodeIndex)) {
+            if (nodeCheck.containsKey(nodeIndex)) {
                 loginResp = buildResponse((byte) -1);
             } else {
                 InetSocketAddress address = (InetSocketAddress) ctx.channel().remoteAddress();
@@ -50,9 +50,9 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
                 if (ok) {
                     nodeCheck.put(nodeIndex, ok);
                 }
-                log.info("登录应答为: {}， 消息体为: {}", loginResp, loginResp.getBody());
-                ctx.writeAndFlush(msg);
             }
+            log.info("登录应答为: {}， 消息体为: {}", loginResp, loginResp.getBody());
+            ctx.writeAndFlush(loginResp);
         } else {
             ctx.fireChannelRead(msg);
         }
