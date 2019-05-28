@@ -10,24 +10,21 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class App {
 
-    int index = 0;
+    static int[] index = {0};
 
     public static void main( String[] args ) throws InterruptedException {
-        Lock lock = new ReentrantLock();
         App app = new App();
+        Lock lock = new ReentrantLock();
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
-                    app.add();
+
+                    for(int j = 0; j < 10; j++) {
+                        lock.lock();
+                        index[0]++;
+                        System.out.println(index[0]);
+                        lock.unlock();
+                    }
             }).start();
         }
-        System.out.println(app.index);
-    }
-
-    public synchronized void add() {
-        synchronized (this) {
-            index++;
-            System.out.println(index);
-        }
-
     }
 }
