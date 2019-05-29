@@ -1,5 +1,6 @@
 package com.github.dragonhht.rpc.provider;
 
+import com.github.dragonhht.rpc.annos.Service;
 import com.github.dragonhht.rpc.api.HelloService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2019-5-28
  */
 @Slf4j
+@Service(interfaceName = HelloService.class)
 public class HelloServiceImpl implements HelloService {
 
     @Override

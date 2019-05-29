@@ -5,7 +5,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * 调用信息.
+ * 服务调用信息.
  *
  * @author: huang
  * @Date: 2019-5-28
@@ -15,7 +15,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class RpcMsg implements Serializable {
+public class RpcRequest implements Serializable {
     private static final long serialVersionUID = -3387583808363913669L;
     /** 类名. */
     private String className;
