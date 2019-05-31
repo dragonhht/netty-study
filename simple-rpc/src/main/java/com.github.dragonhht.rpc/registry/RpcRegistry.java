@@ -1,5 +1,6 @@
 package com.github.dragonhht.rpc.registry;
 
+import com.github.dragonhht.rpc.common.CommonConstants;
 import com.github.dragonhht.rpc.registry.handler.RpcRegistryHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -73,7 +74,7 @@ public class RpcRegistry {
     }
 
     public static void main(String[] args) {
-        new RpcRegistry(8888).start();
+        new RpcRegistry(CommonConstants.REGISTRY_PORT).start();
     }
 
 }
